@@ -20,10 +20,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = Color.White
-            ) {
+            Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
                 PantallaTest()
             }
         }
@@ -31,74 +28,41 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PantallaTest(allportViewModel: AllportViewModel = viewModel()) {
-    // Tomamos la primera pregunta del repositorio
+fun PantallaTest(vm: AllportViewModel = viewModel()) {
     val pregunta = AllportRepository.preguntasParte1[0]
+    var pA by remember { mutableIntStateOf(0) }
+    var pB by remember { mutableIntStateOf(0) }
 
-    // Usamos mutableIntStateOf para mejor rendimiento como sugirió tu IDE
-    var puntosA by remember { mutableIntStateOf(0) }
-    var puntosB by remember { mutableStateOf(0) } // Este se actualiza en base a A
-
-    Column(
-        modifier = Modifier.fillMaxSize().padding(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Test de Valores de Allport", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+    Column(modifier = Modifier.fillMaxSize().padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Test de Allport", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(30.dp))
 
-        // TARJETA ESTILO GLASSMORPHISM
         Card(
-            modifier = Modifier.fillMaxWidth().height(250.dp),
+            modifier = Modifier.fillMaxWidth().height(200.dp),
             shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(containerColor = Color(0xFF00E5FF).copy(alpha = 0.1f)),
             border = BorderStroke(1.dp, Color.LightGray.copy(alpha = 0.5f))
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
-                Text(text = "Pregunta ${pregunta.id}", fontWeight = FontWeight.Bold, color = Color.Gray)
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(text = pregunta.enunciado, fontSize = 18.sp, color = Color.Black)
+                Text(pregunta.enunciado, fontSize = 18.sp, color = Color.Black)
             }
         }
 
         Spacer(modifier = Modifier.height(40.dp))
+        Text("Reparta 3 puntos entre A y B")
 
-        Text("Reparta 3 puntos entre las opciones:", fontWeight = FontWeight.Medium)
-
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 20.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            // Botón Opción A
-            OutlinedButton(
-                onClick = { if (puntosA < 3) { puntosA++; puntosB = 3 - puntosA } },
-                shape = RoundedCornerShape(12.dp),
-                border = BorderStroke(2.dp, Color(0xFF00E5FF))
-            ) {
-                Text("A: $puntosA", color = Color.Black)
-            }
-
-            // Botón Opción B
-            OutlinedButton(
-                onClick = { if (puntosB < 3) { puntosB++; puntosA = 3 - puntosB } },
-                shape = RoundedCornerShape(12.dp),
-                border = BorderStroke(2.dp, Color(0xFF00E5FF))
-            ) {
-                Text("B: $puntosB", color = Color.Black)
-            }
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+            Button(onClick = { if (pA < 3) { pA++; pB = 3 - pA } }) { Text("A: $pA") }
+            Button(onClick = { if (pB < 3) { pB++; pA = 3 - pB } }) { Text("B: $pB") }
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(
-            onClick = {
-                allportViewModel.registrarRespuesta(pregunta.columnaA, puntosA)
-                allportViewModel.registrarRespuesta(pregunta.columnaB, puntosB)
-            },
-            modifier = Modifier.fillMaxWidth().height(56.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
-        ) {
-            Text("Siguiente Pregunta", color = Color.White)
+        Button(onClick = {
+            vm.registrarRespuesta(pregunta.columnaA, pA)
+            vm.registrarRespuesta(pregunta.columnaB, pB)
+        }, modifier = Modifier.fillMaxWidth()) {
+            Text("Siguiente")
         }
     }
 }
