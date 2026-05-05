@@ -1,8 +1,12 @@
 package com.ml.allportvaluestest
+
+/**
+ * Repositorio actualizado según la hoja de respuestas oficial.
+ * Cada 'columnaA' y 'columnaB' corresponde al valor (R, S, T, X, Y, Z)
+ * indicado en las casillas de calificación del manual.
+ */
 object AllportRepository {
 
-    // --- PRIMERA PARTE (Páginas 2 a 5) ---
-    // El usuario debe repartir 3 puntos entre A y B
     val preguntasParte1 = listOf(
         PreguntaParte1(
             id = 1,
@@ -33,13 +37,44 @@ object AllportRepository {
             enunciado = "Dando por hecho que usted tiene la habilidad necesaria, preferiría ser:",
             opcionA = "Banquero",
             opcionB = "Político",
-            columnaA = "S", // Económico
-            columnaB = "R"  // Teórico
+            columnaA = "S", // Económico (Columna S en tu imagen)
+            columnaB = "Y"  // Político
+        ),
+        PreguntaParte1(
+            id = 5,
+            enunciado = "¿Cree justificable que los grandes artistas como Beethoven, Wagner y Byron hayan sido egoístas e indiferentes a los sentimientos de otros?",
+            opcionA = "Sí",
+            opcionB = "No",
+            columnaA = "T", // Estético (Columna T en tu imagen)
+            columnaB = "X"  // Social
+        ),
+        PreguntaParte1(
+            id = 6,
+            enunciado = "¿Cuál de estas dos disciplinas cree que llegarán a tener en el futuro un mayor valor para la humanidad?",
+            opcionA = "Las matemáticas",
+            opcionB = "La teología",
+            columnaA = "R", // Teórico (Columna R en tu imagen)
+            columnaB = "Z"  // Religioso
+        ),
+        PreguntaParte1(
+            id = 7,
+            enunciado = "¿Cuál considera usted que debe ser la función más importante de los grandes dirigentes modernos?",
+            opcionA = "Inducir a la gente a obtener resultados prácticos",
+            opcionB = "Inducir a la gente a interesarse por los Derechos de otros",
+            columnaA = "S", // Económico (Columna S en tu imagen)
+            columnaB = "X"  // Social
+        ),
+        PreguntaParte1(
+            id = 8,
+            enunciado = "Cuando presencia una ceremonia pomposa (eclesiástica o académica) ¿qué le impresiona más?",
+            opcionA = "El colorido y formalidad del acto mismo",
+            opcionB = "La influencia y la fuerza del grupo",
+            columnaA = "T", // Estético (Columna T en tu imagen)
+            columnaB = "Y"  // Político
         )
     )
 
-    // --- SEGUNDA PARTE (Páginas 7 a 9) ---
-    // El usuario debe ordenar las 4 opciones del 4 al 1
+    // La Parte 2 se mantiene con su lógica de ordenamiento (4, 3, 2, 1)
     val preguntasParte2 = listOf(
         PreguntaParte2(
             id = 1,
@@ -50,18 +85,7 @@ object AllportRepository {
                 "c. Introducir los más elevados principios de la ética",
                 "d. Colocar a la nación en una posición de prestigio"
             ),
-            columnasAsociadas = listOf("X", "S", "R", "Y") // Social, Económico, Teórico, Político
-        ),
-        PreguntaParte2(
-            id = 2,
-            enunciado = "Si usted tuviera tiempo y dinero, ¿qué preferiría hacer?",
-            opciones = listOf(
-                "a. Ayudar a las personas que necesitan caridad",
-                "b. Dedicarse al estudio de las bellas artes",
-                "c. Invertir en negocios productivos",
-                "d. Estudiar los misterios de la naturaleza"
-            ),
-            columnasAsociadas = listOf("X", "T", "S", "R") // Social, Estético, Económico, Teórico
+            columnasAsociadas = listOf("X", "S", "R", "Y")
         )
     )
 }

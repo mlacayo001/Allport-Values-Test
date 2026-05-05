@@ -29,14 +29,21 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun PantallaTest(vm: AllportViewModel = viewModel()) {
-    val pregunta = AllportRepository.preguntasParte1[0]
-    var pA by remember { mutableIntStateOf(0) }
-    var pB by remember { mutableIntStateOf(0) }
+    // Obtenemos la pregunta actual basada en el índice del ViewModel
+    val pregunta = AllportRepository.preguntasParte1[vm.indicePregunta]
 
-    Column(modifier = Modifier.fillMaxSize().padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Test de Allport", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+    // Puntos locales para la pregunta actual
+    var pA by remember(vm.indicePregunta) { mutableIntStateOf(0) }
+    var pB by remember(vm.indicePregunta) { mutableIntStateOf(0) }
+
+    Column(
+        modifier = Modifier.fillMaxSize().padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("Test de Allport - UAM", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(30.dp))
 
+        // Tarjeta con estética translúcida (Glassmorphism)
         Card(
             modifier = Modifier.fillMaxWidth().height(200.dp),
             shape = RoundedCornerShape(24.dp),
@@ -44,25 +51,36 @@ fun PantallaTest(vm: AllportViewModel = viewModel()) {
             border = BorderStroke(1.dp, Color.LightGray.copy(alpha = 0.5f))
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
-                Text(pregunta.enunciado, fontSize = 18.sp, color = Color.Black)
+                Text(text = pregunta.enunciado, fontSize = 18.sp, color = Color.Black)
             }
         }
 
         Spacer(modifier = Modifier.height(40.dp))
-        Text("Reparta 3 puntos entre A y B")
+        Text("Reparta 3 puntos entre las opciones:")
 
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
             Button(onClick = { if (pA < 3) { pA++; pB = 3 - pA } }) { Text("A: $pA") }
             Button(onClick = { if (pB < 3) { pB++; pA = 3 - pB } }) { Text("B: $pB") }
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(onClick = {
-            vm.registrarRespuesta(pregunta.columnaA, pA)
-            vm.registrarRespuesta(pregunta.columnaB, pB)
-        }, modifier = Modifier.fillMaxWidth()) {
-            Text("Siguiente")
+        Button(
+            onClick = {
+                // Guardar respuestas en el ViewModel
+                vm.registrarRespuesta(pregunta.columnaA, pA)
+                vm.registrarRespuesta(pregunta.columnaB, pB)
+
+                // Avanzar a la siguiente pregunta
+                vm.avanzarSiguiente()
+            },
+            modifier = Modifier.fillMaxWidth().height(56.dp),
+            enabled = (pA + pB == 3) // Solo se activa si repartió los 3 puntos
+        ) {
+            Text(if (vm.indicePregunta < AllportRepository.preguntasParte1.size - 1) "Siguiente" else "Finalizar Parte 1")
         }
     }
 }
